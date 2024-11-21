@@ -1,6 +1,22 @@
+#include <vector>
+#include <string>
+
 using namespace std; 
 
 class Transactions{
+
+    struct operations{
+        int mode; // if we are rewriting or adding new when writing 
+        int ID; // id of the row in table that we want to R/W
+        int node; // the node we want to operate on 
+        string column; // the column in which we want the ID
+    };
+
+    struct transaction{
+        vector<operations> op; // vector of operations (sort of like a chain)
+        
+        // need some sort of counter/increment for origin ordering 
+    };
 
 
     /*
