@@ -3,19 +3,22 @@
 
 using namespace std; 
 
-class Transactions{
+// we will set it up so that the tranasction manager has the ability to connect to the servers 
+// also through a socket. so we can have many servers and many clients. 
+
+class TransactionManager{
 
     struct operations{
-        int mode; // if we are rewriting or adding new when writing 
-        int ID; // id of the row in table that we want to R/W
-        int node; // the node we want to operate on 
-        string column; // the column in which we want the ID
+        string type; // R or W
+        int ID; // record ID to operate on 
+        string column; // column name 
+        string value; // new value for write operations 
     };
 
     struct transaction{
+         int transactionID;
         vector<operations> op; // vector of operations (sort of like a chain)
-        
-        // need some sort of counter/increment for origin ordering 
+        string status; 
     };
 
 

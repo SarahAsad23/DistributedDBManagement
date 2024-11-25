@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 * This file will contain the methods to read and write to the database 
 */
