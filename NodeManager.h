@@ -97,9 +97,7 @@ public:
         }
 
         cerr << "row with that ID NOT FOUND";
-        return -1; 
-
-
+        return -1;
     }
 
     // reading from a node/file

@@ -10,51 +10,24 @@
 #include <sys/socket.h>		//coket, bind, listen, inet_ntoa
 #include <netinet/in.h>		//hton1, htons, inet_ntoa
 #include <unistd.h>
+#include "TransactionManager.h"
 
 
 
 using namespace std; 
 
-// we will use sockets to set up the servers and on each server we will 
-    // route it to operate on only 1 table. 
+// we will use sockets to set up the server and  will 
+    // route it to operate on only each table/node table. 
 
     // each node runs as a server responsible for 
         // listening for requests from the transaction manager (client)
         // performing read and write operations on csv file 
         // returning ack to the client after each hop
 
-struct operations{
-    string type; // R or W
-    int ID; // record ID to operate on 
-    string column; // column name 
-    string oldValue; // old value for write operations 
-    string newValue; // new value for write operations 
-    int node; // table we want to operate on 
-};
-
-struct transaction{
-    int transactionID;
-    vector<operations> op; // vector of operations (sort of like a chain) 
-     
-};
-
-// Trans 1: update Project Name for Employee with ID 300
-// Trans 2: for a project with ID 20, update the corresponding task description for that project 
-
-
-/*
-vector<transaction> predefinedTransactions = {
-    {1, {{"READ", 300, "Employee_ID", "", 3}, {"WRITE", 300, "Project_Name", "Nebula Shift", "NEW NAME ADDED", 1}}}, 
-    {2, {{"READ", 20, "Project_ID", "", 1}, {"WRITE", 20, "Task_Description", "collect feedback from clients", "NEW TASK DESCRIPTION", 2}}}, 
-    {3, {{}, {}}}, 
-    {4, {{}, {}}}
-}
-*/
-
-
 class NodeServer{
 
 private: 
+
     NodeManager nodeManager; 
     int node; 
     int port; 
@@ -77,11 +50,6 @@ private:
     }
 
 public: 
-
-    // constructor for setting up a node server 
-    NodeServer(){
-        
-    }
 
     // starting the server 
     void StartServer(int port) {

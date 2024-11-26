@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <string>
 
@@ -6,20 +8,29 @@ using namespace std;
 // we will set it up so that the tranasction manager has the ability to connect to the servers 
 // also through a socket. so we can have many servers and many clients. 
 
+struct operations{
+    string type; // R or W
+    int ID; // record ID to operate on 
+    string column; // column name 
+    string oldValue; // old value for write operations 
+    string newValue; // new value for write operations 
+    int node; // table we want to operate on 
+};
+
+struct transaction{
+    int transactionID;
+    vector<operations> op; // vector of operations (sort of like a chain) 
+     
+};
+
 class TransactionManager{
 
-    struct operations{
-        string type; // R or W
-        int ID; // record ID to operate on 
-        string column; // column name 
-        string value; // new value for write operations 
-    };
-
-    struct transaction{
-         int transactionID;
-        vector<operations> op; // vector of operations (sort of like a chain)
-        string status; 
-    };
+   // need to have a function here that checks for cycles
+   // dont really need to check for predefined transactions 
+   // but need to check for dynamic transactions 
+   bool hasScCycle(transaction t){
+      
+   }
 
 
     /*
@@ -65,5 +76,8 @@ class TransactionManager{
 
     2) 2nd hop: 
     */
+
+
+   
   
 };
