@@ -29,24 +29,42 @@ class NodeServer{
 private: 
 
     NodeManager nodeManager; 
+    TransactionManager transactionManager; 
     int node; 
     int port; 
 
+    
     // function to process the clients request
-    string ProcessClientRequest(const string& request){
-        stringstream ss(request); 
-        string operation, column; 
-        int ID; 
+    string ProcessClientRequest(int clientSocket, transaction t){
+        // to read, need Type, ID, node, column
 
-        ss >> operation >> ID >> column; 
+        string ack; 
 
-        if (operation == "READ"){
-            string response = nodeManager.Read(ID, node, column); 
-            return response.empty() ? "ERROR: Record not found" : "SUCCESS" + response + "\n"; 
+        for(int i = 0; i < t.op.size(); i++){
+            string response; 
+
+            if(t.op[i].type == "R"){
+                response = nodeManager.Read(t.op[i].IDNum, t.op[i].node, t.op[i].column);
+
+
+            }
+            else if(t.op[i].type == "W"){
+                nodeManager.Write(clientSocket, t.op[i].IDString, t.op[i].column, t.op[i].newValue, t.op[i].node); 
+                response = "Write successfuly completed";
+                
+            }
+
+            ack = "ACK for operation " + to_string(i + 1) + ": " + response + "\n";
+            send(clientSocket, ack.c_str(), ack.size(), 0); 
+
+
+            //wait for client response before moving to next operation 
+            char buffer[1024] = {0}; 
+            read(clientSocket, buffer, sizeof(buffer)); 
         }
-        else{ // want to wrtie 
-            return "write"; 
-        }
+
+        return "Transaction Complete"; 
+      
     }
 
 public: 
@@ -85,33 +103,36 @@ public:
             else{
                 cout << "Successfully connected\n";
             }
+            
+            while(true){
+                string transactions = "Choose a Transaction to run \n"
+                                    "1) Update Project name for Employee with ID 300 \n"
+                                    "2) ANOTHER TRANSACTION\n" 
+                                    "3) ANOTHER TRANSACTION\n" 
+                                    "4) ANOTHER TRANSACTION\n";
+                send(clientSocket, transactions.c_str(), transactions.size(), 0); 
 
-            char buffer[1024] = {0}; 
-            read(clientSocket, buffer, sizeof(buffer)); 
-            cout << "Recieved" << buffer << "\n"; 
+                char buffer[1024] = {0}; 
+                read(clientSocket, buffer, sizeof(buffer));
+            
+                string clientChoice(buffer); 
+                clientChoice.erase(clientChoice.find_last_not_of("\n\r\t") + 1); 
+                cout << "Client selected transaction " << clientChoice << "\n"; 
 
-            // process the client request and get a response
-            //string response = ProcessClientRequest(buffer); 
+                transaction t = transactionManager.pickTransaction(clientChoice); 
 
-            string response = "HELLO FROM SERVER\n"; 
+                ProcessClientRequest(clientSocket, t); 
 
-            // sent the response back to the cleint 
-            send(clientSocket, response.c_str(), response.size(), 0); 
+                //string response = "Server has recieved the trasaction choice " + clientChoice + "\n"; 
+
+                // sent the response back to the cleint 
+                //send(clientSocket, response.c_str(), response.size(), 0); 
+            } 
 
             //close the socket
-            close(clientSocket); 
-
+            close(clientSocket);
         }
+        
     }
-
-  
-
-
-    
-
-
-    
-
-    
 
 };

@@ -2,14 +2,17 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-#include "NodeServer.h"
-#include "Client.h"
+//#include "NodeServer.h"
+//#include "Client.h"
+#include "NodeManager.h"
 
 using namespace std; 
 
+/*
+
 int main(int argc, char* argv[]){
 
-        // Check if enough arguments are provided
+    // Check if enough arguments are provided
     if (argc < 3) {
         cerr << "Usage: Server port\n";
         cerr << "Client ServerIP port\n";
@@ -57,10 +60,16 @@ int main(int argc, char* argv[]){
     return 0;
 }
 
+*/
 
-    // This is where we will define the transactions 
-    //NodeManager n; 
-    //n.Read(300, 3, "Employee_ID");
+int main(){
+      // This is where we will define the transactions 
+    NodeManager n; 
+    n.Write("Nebula Shift", "Project_Name", "NEW PROJECT", 1);
+}
+
+
+  
     
 
 

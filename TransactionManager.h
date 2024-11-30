@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <chrono>
 
 using namespace std; 
 
@@ -10,20 +11,53 @@ using namespace std;
 
 struct operations{
     string type; // R or W
-    int ID; // record ID to operate on 
+    int IDNum; // record ID to operate on 
+    string IDString; 
     string column; // column name 
-    string oldValue; // old value for write operations 
     string newValue; // new value for write operations 
     int node; // table we want to operate on 
 };
 
 struct transaction{
-    int transactionID;
+    long long timeStamp; 
     vector<operations> op; // vector of operations (sort of like a chain) 
      
 };
 
 class TransactionManager{
+public: 
+   // this will allow us to get the surrent time to do timestamp ordering
+   long long getTimeStamp(){
+      return chrono::duration_cast<chrono::milliseconds>(
+         chrono::system_clock::now().time_since_epoch()).count();
+   }
+
+   transaction pickTransaction(const string& clientChoice){
+      transaction t; // create the transaction 
+      t.timeStamp = getTimeStamp(); //get the timestamp 
+
+      if(stoi(clientChoice) == 1){
+         // T1: look up employee with ID 300 and update that 
+         // corresponding employees project name 
+
+         t.op.push_back({"R", 300, "", "Employee_ID", "", 3}); 
+         t.op.push_back({"W", 300, "Nebula Shift", "Project_Name", "New Name", 1}); 
+      }
+      else if(stoi(clientChoice) == 2){
+         //T2: 
+         
+      }
+      else if(stoi(clientChoice) == 3){
+         //T3: 
+
+      }
+      else if(stoi(clientChoice) == 4){
+         //T4: 
+
+      }
+
+      return t; 
+    }
 
    // need to have a function here that checks for cycles
    // dont really need to check for predefined transactions 
@@ -31,53 +65,4 @@ class TransactionManager{
    bool hasScCycle(transaction t){
       
    }
-
-
-    /*
-    Transaction 1: look for project with ID 5 and update the 
-    corresponding project managers role to Manager 
-
-    Operations
-    1) 1st hop: read project manager ID from projects table 
-       where the project with ID is 5 
-
-    2) 2nd hop: write to employees table with employee ID, ID 
-       from above and change ther role to "Manager"
-    */
-
-    /*
-    Transaction 2: add a Project for Employee with ID 300
-
-    Operations: 
-    1) 1st hop: read from employees table to ensure that 
-       employee with ID 300 exists 
-
-    2) 2nd hop: in projects table, add a new project with 
-       Project_Manager_ID set to 300 
-    */
-
-   /*
-   Transaction 3: for a project with ID 15, update the corresponding 
-   task description for that project 
-
-   Operations: 
-   1) 1st hop: read from projects table to ensure that the project 
-      with ID 15 exists 
-
-   2) 2nd hop: find project task with ID 15 to update the 
-      corresponding task descrption 
-   */
-
-    /*
-    Transaction 4: 
-
-    Operations: 
-    1) 1st hop: 
-
-    2) 2nd hop: 
-    */
-
-
-   
-  
 };

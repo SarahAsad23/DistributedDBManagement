@@ -10,6 +10,11 @@
 #include <string>
 #include <cstdio>
 #include <vector>
+#include <algorithm>
+#include <sys/types.h>		//socket, bind
+//#include <sys/socket.h>		//coket, bind, listen, inet_ntoa
+//#include <netinet/in.h>		//hton1, htons, inet_ntoa
+//#include <unistd.h>
 
 using namespace std;
 
@@ -27,6 +32,13 @@ private:
             cerr << "Invalid FIle Access";
             return "";
         }
+    }
+
+    string trim(const string& str) {
+        size_t first = str.find_first_not_of(" \t\r\n");
+        if (first == string::npos) return ""; // No non-whitespace characters
+        size_t last = str.find_last_not_of(" \t\r\n");
+        return str.substr(first, (last - first + 1));
     }
 
 public: 
@@ -133,16 +145,125 @@ public:
         
     }
 
-    // writitng to a node/file 
-    void Write(int mode, int node, int ID){
-        // adding a new entry into file 
-        if (mode == 1){
 
-        }
-        //rewriting a file (editing existing entry)
-        else{
+    string Write(string ID, string column, string newValue, int node) {
+        // Get the file name for the specified node
+        string fileName = getFileName(node);
 
+        if (fileName.empty()) {
+            return "Error: Invalid node.";
         }
 
+        // Open the file for reading
+        ifstream inFile(fileName);
+        if (!inFile) {
+            return "Error: Unable to open file for reading.";
+        }
+
+        // Read all file data into memory to process changes
+        vector<string> fileData;
+        string line;
+
+        // Read header first
+        if (getline(inFile, line)) {
+            fileData.push_back(line); // Add headers back to the fileData
+        }
+
+        vector<string> headers;
+        stringstream headerStream(line);
+        string header;
+
+        // Parse the headers to find the column index
+        while (getline(headerStream, header, ',')) {
+            headers.push_back(trim(header));
+        }
+
+        /*
+        // print headers
+        for(int i = 0; i < headers.size(); i ++){
+            cout << headers[i] << " "; 
+        }
+        */
+
+        // Find the column index
+        int colIndex = -1;
+        for (int i = 0; i < headers.size(); i++) {
+            if (headers[i] == trim(column)) {
+                colIndex = i;
+                break;
+            }
+        }
+
+        //cout << "Column index found: " << colIndex << endl;
+
+        if (colIndex == -1) {
+            return "Error: Column not found.";
+        }
+
+        // Process rows to locate the record
+        bool recordFound = false;
+        string oldRow, newRow;
+        while (getline(inFile, line)) {
+            stringstream ss(line);
+            vector<string> rowValues;
+            string value;
+
+            // Split the row into values based on commas
+            while (getline(ss, value, ',')) {
+                rowValues.push_back(value);
+            }
+
+            // Check if the value in the specified column matches the ID
+
+            //cout << rowValues[colIndex] << "\n"; 
+            cout << ID << "\n";
+
+            if (trim(rowValues[colIndex]) == trim(ID)) {
+                oldRow = line; // Save the old row;  
+                rowValues[colIndex] = newValue; // Update the value in the target column
+                recordFound = true;
+
+                // Rebuild the row with the updated value
+                newRow.clear(); // Clear any previous data
+                for (int i = 0; i < rowValues.size(); i++) {
+                    newRow += rowValues[i];
+                    if (i != rowValues.size() - 1) {
+                        newRow += ",";
+                    }
+                }
+
+                //cout << "Updated row: " << newRow << endl; 
+            }
+
+            // Always add the row (updated or original) to the file data
+            if (recordFound && oldRow == line) {
+                fileData.push_back(newRow);  // Add updated row
+            } else {
+                fileData.push_back(line);  // Add original row
+            }
+        }
+
+        inFile.close();
+
+        if (!recordFound) {
+            return "Error: Record with specified ID not found.";
+        }
+
+        // write updated data back to the file
+        ofstream outFile(fileName);
+        if (!outFile) {
+            return "Error: Unable to open file for writing.";
+        }
+
+        // write all the data including header
+        for (const string& dataLine : fileData) {
+            outFile << dataLine << "\n";
+        }
+
+        outFile.close();
+
+        //cout << "OLD Row: " << oldRow << "\nNEW Row: " << newRow << endl;
+
+        return "OLD Row: " + oldRow + "\nNEW Row: " + newRow;
     }
 };

@@ -34,18 +34,46 @@ public:
             cerr << "Connection Failed\n"; 
         }
 
-        string message = "HELLO SERVER\n"; 
+        while(true){
+            //read transaction choices from buffer 
+            char choice[1024] = {0}; 
+            read(clientSocket, choice, sizeof(choice));
 
-        // send request to server 
-        send(clientSocket, message.c_str(), message.size(), 0); 
-        cout << "Message sent to Server " << message << "\n"; 
+            cout << choice << "\n"; 
 
-        //recieve response from server 
-        char buffer[1024] = {0}; 
-        read(clientSocket, buffer, sizeof(buffer)); 
+            // client enters number 
+            string userChoice; 
+            cin >> userChoice; 
 
-        cout << "Response from server " << buffer << "\n"; 
+            userChoice += '\n';
 
+            cout << "now sending clients choice\n"; 
+
+            // send that choice to server 
+            send(clientSocket, userChoice.c_str(), userChoice.size(), 0); 
+            cout << "Choice sent to server " << userChoice << endl;
+
+            //recieve response/ack from server that they recived that choice
+            char buffer[1024] = {0}; 
+            read(clientSocket, buffer, sizeof(buffer)); 
+            cout << "Response from server " << buffer << endl; 
+
+            // then client also sends response to ack which allows the 
+            // second hop to happen 
+            string res = "OK"; 
+            send(clientSocket, res.c_str(), res.size(), 0); 
+            cout << "Sending response: " << res << endl; 
+
+            // read second ack 
+            read(clientSocket, buffer, sizeof(buffer)); 
+            cout << "Response from server " << buffer << endl; 
+
+            //send ok 
+            send(clientSocket, res.c_str(), res.size(), 0); 
+            cout << "Sending response: " << res << endl;
+
+            
+        }
 
         // close socket connection
         close(clientSocket); 
