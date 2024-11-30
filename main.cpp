@@ -2,13 +2,10 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-//#include "NodeServer.h"
-//#include "Client.h"
-#include "NodeManager.h"
+#include "NodeServer.h"
+#include "Client.h"
 
 using namespace std; 
-
-/*
 
 int main(int argc, char* argv[]){
 
@@ -60,15 +57,14 @@ int main(int argc, char* argv[]){
     return 0;
 }
 
-*/
 
+/*
 int main(){
-      // This is where we will define the transactions 
+    // Testing out locally 
     NodeManager n; 
     n.Write("Nebula Shift", "Project_Name", "NEW PROJECT", 1);
 }
-
-
+*/
   
     
 

@@ -45,13 +45,9 @@ private:
 
             if(t.op[i].type == "R"){
                 response = nodeManager.Read(t.op[i].IDNum, t.op[i].node, t.op[i].column);
-
-
             }
             else if(t.op[i].type == "W"){
-                nodeManager.Write(clientSocket, t.op[i].IDString, t.op[i].column, t.op[i].newValue, t.op[i].node); 
-                response = "Write successfuly completed";
-                
+                response = nodeManager.Write(t.op[i].IDString, t.op[i].column, t.op[i].newValue, t.op[i].node);    
             }
 
             ack = "ACK for operation " + to_string(i + 1) + ": " + response + "\n";

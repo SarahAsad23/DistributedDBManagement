@@ -11,10 +11,6 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
-#include <sys/types.h>		//socket, bind
-//#include <sys/socket.h>		//coket, bind, listen, inet_ntoa
-//#include <netinet/in.h>		//hton1, htons, inet_ntoa
-//#include <unistd.h>
 
 using namespace std;
 
@@ -178,12 +174,12 @@ public:
             headers.push_back(trim(header));
         }
 
-        /*
+        
         // print headers
         for(int i = 0; i < headers.size(); i ++){
             cout << headers[i] << " "; 
         }
-        */
+        
 
         // Find the column index
         int colIndex = -1;
@@ -194,7 +190,7 @@ public:
             }
         }
 
-        //cout << "Column index found: " << colIndex << endl;
+        cout << "Column index found: " << colIndex << endl;
 
         if (colIndex == -1) {
             return "Error: Column not found.";
@@ -208,6 +204,8 @@ public:
             vector<string> rowValues;
             string value;
 
+            cout << "ID IS: " << ID << "\n";
+
             // Split the row into values based on commas
             while (getline(ss, value, ',')) {
                 rowValues.push_back(value);
@@ -215,8 +213,9 @@ public:
 
             // Check if the value in the specified column matches the ID
 
-            //cout << rowValues[colIndex] << "\n"; 
-            cout << ID << "\n";
+            cout << "rowValues[colIndex]: " << trim(rowValues[colIndex]) << "\n";
+            cout << "ID: " << trim(ID) << "\n"; 
+            
 
             if (trim(rowValues[colIndex]) == trim(ID)) {
                 oldRow = line; // Save the old row;  
@@ -262,7 +261,7 @@ public:
 
         outFile.close();
 
-        //cout << "OLD Row: " << oldRow << "\nNEW Row: " << newRow << endl;
+        cout << "OLD Row: " << oldRow << "\nNEW Row: " << newRow << endl;
 
         return "OLD Row: " + oldRow + "\nNEW Row: " + newRow;
     }
