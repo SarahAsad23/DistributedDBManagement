@@ -44,15 +44,26 @@ public:
          t.op.push_back({"W", 300, "Nebula Shift", "Project_Name", "New Name", 1}); 
       }
       else if(stoi(clientChoice) == 2){
-         //T2: 
-         
+         //T2: look up employee with ID 300(to get the Project_Name)
+         //update coresponding Task_ID in Task.csv to 0 (indicates that it is in high priority)
+
+         t.op.push_back({"R", 300, "", "Employee_ID", "", 3}); 
+         t.op.push_back({"R", 10, "8", "Task_ID", "0", 2})
       }
       else if(stoi(clientChoice) == 3){
-         //T3: 
+         //T3: look up employee with ID 300(to get the Project_ID)
+         //add a new task of it in Task.cvs(the project is really important and has more tasks to do)
+
+         t.op.push_back({"R", 300, "", "Employee_ID", "", 3}); 
+         t.op.push_back({"W", })
 
       }
       else if(stoi(clientChoice) == 4){
-         //T4: 
+         //T4: read Task_Name="client feedback analysis"(get the info and find it in a hurry and not done yet)
+         //delete Employee_ID==500 in Employee.csv(the company choose to fire another manager due to tighter budget)
+
+         t.op.push_back({"R", })
+         t.op.push_back({"W", })
 
       }
 
