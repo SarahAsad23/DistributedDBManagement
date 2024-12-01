@@ -30,9 +30,10 @@ private:
         }
     }
 
+    // helper function for Read and Write to trim whitespace when doing comparison 
     string trim(const string& str) {
         size_t first = str.find_first_not_of(" \t\r\n");
-        if (first == string::npos) return ""; // No non-whitespace characters
+        if (first == string::npos) return ""; // no non-whitespace characters
         size_t last = str.find_last_not_of(" \t\r\n");
         return str.substr(first, (last - first + 1));
     }

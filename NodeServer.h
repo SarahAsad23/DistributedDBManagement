@@ -63,6 +63,30 @@ private:
       
     }
 
+
+
+    void HandleClient(int clientSocket){
+        while(true){
+            string transactions = "Choose a Transaction to run \n"
+                                "1) Update Project name for Employee with ID 300 \n"
+                                "2) Update teask decription for project with ID 20 (read from same project T1 wrote to)\n" 
+                                "3) ANOTHER TRANSACTION\n" 
+                                "4) ANOTHER TRANSACTION\n";
+            send(clientSocket, transactions.c_str(), transactions.size(), 0); 
+
+            char buffer[1024] = {0}; 
+            read(clientSocket, buffer, sizeof(buffer));
+        
+            string clientChoice(buffer); 
+            clientChoice.erase(clientChoice.find_last_not_of("\n\r\t") + 1); 
+            cout << "Client selected transaction " << clientChoice << "\n"; 
+
+            transaction t = transactionManager.pickTransaction(clientChoice); 
+
+            ProcessClientRequest(clientSocket, t); 
+        } 
+    }
+
 public: 
 
     // starting the server 
@@ -98,36 +122,14 @@ public:
             }
             else{
                 cout << "Successfully connected\n";
-            }
-            
-            while(true){
-                string transactions = "Choose a Transaction to run \n"
-                                    "1) Update Project name for Employee with ID 300 \n"
-                                    "2) ANOTHER TRANSACTION\n" 
-                                    "3) ANOTHER TRANSACTION\n" 
-                                    "4) ANOTHER TRANSACTION\n";
-                send(clientSocket, transactions.c_str(), transactions.size(), 0); 
-
-                char buffer[1024] = {0}; 
-                read(clientSocket, buffer, sizeof(buffer));
-            
-                string clientChoice(buffer); 
-                clientChoice.erase(clientChoice.find_last_not_of("\n\r\t") + 1); 
-                cout << "Client selected transaction " << clientChoice << "\n"; 
-
-                transaction t = transactionManager.pickTransaction(clientChoice); 
-
-                ProcessClientRequest(clientSocket, t); 
-
-                //string response = "Server has recieved the trasaction choice " + clientChoice + "\n"; 
-
-                // sent the response back to the cleint 
-                //send(clientSocket, response.c_str(), response.size(), 0); 
-            } 
-
-            //close the socket
-            close(clientSocket);
+                // Create a thread for each client 
+                thread clinetThread(&NodeServer::HandleClient, this, clientSocket); 
+                clinetThread.detach(); // detach thread to handle client independantly 
+            }    
         }
+
+        //close the socket
+        close(serverSocket);
         
     }
 
