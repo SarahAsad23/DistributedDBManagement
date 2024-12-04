@@ -88,8 +88,8 @@ private:
         while(true){
             string transactions = "Choose a Transaction to run \n"
                                 "1) Update Project name for Employee with ID 300 \n"
-                                "2) Update teask decription for project with ID 20 (read from same project T1 wrote to)\n" 
-                                "3) ANOTHER TRANSACTION\n" 
+                                "2) Update teask decription for project with Manager ID 300\n" 
+                                "3) Read project with ID 20 and add task for that project \n" 
                                 "4) ANOTHER TRANSACTION\n";
             send(clientSocket, transactions.c_str(), transactions.size(), 0); 
 
