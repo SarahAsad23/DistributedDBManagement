@@ -41,29 +41,24 @@ public:
          // corresponding employees project name 
 
          t.op.push_back({"R", 300, "", "Employee_ID", "", 3}); 
-         t.op.push_back({"W", 300, "Nebula Shift", "Project_Name", "New Name", 1}); 
+         t.op.push_back({"W", 300, "06-10-2023", "Start_Date", "01-01-2024", 1}); 
       }
       else if(stoi(clientChoice) == 2){
-         //T2: look up employee with ID 300(to get the Project_Name)
-         //update coresponding Task_ID in Task.csv to 0 (indicates that it is in high priority)
-
-         t.op.push_back({"R", 300, "", "Employee_ID", "", 3}); 
-         t.op.push_back({"R", 10, "8", "Task_ID", "0", 2})
+         //T2:  look up Project with Project_Manager_ID == 300 
+         //add a new corresponding(Project_ID == 20) task in Task.csv with Task_Id == 0, Task_Name == prepare annual budget report, Task_Discription == estimate cost of the project
+         t.op.push_back({"R", 300, "", "Project_Manager_ID", "", 1}); 
+         //t.op.push_back({"W", });
       }
       else if(stoi(clientChoice) == 3){
-         //T3: look up employee with ID 300(to get the Project_ID)
-         //add a new task of it in Task.cvs(the project is really important and has more tasks to do)
-
-         t.op.push_back({"R", 300, "", "Employee_ID", "", 3}); 
-         t.op.push_back({"W", })
-
+         //T3: look up Project with Project ID== 20(to get corresponding Project_ID)
+         //add a new corresponding(Project_ID == 20)  task in Task.cvs with Task_id == 14, Task_Name == place an advertisement, Task_Discription == find ADs sponsor
+         t.op.push_back({"R", 20, "", "Project_ID", "", 1}); 
+         //t.op.push_back({"W", });
       }
       else if(stoi(clientChoice) == 4){
-         //T4: read Task_Name="client feedback analysis"(get the info and find it in a hurry and not done yet)
-         //delete Employee_ID==500 in Employee.csv(the company choose to fire another manager due to tighter budget)
-
-         t.op.push_back({"R", })
-         t.op.push_back({"W", })
+         //T4: Read: look up Task_id == "14" in Task.csv
+         //Write: add Project_ID == 30 in Project.csv with Manager_ID == 200, Project_Name == Eclipse Edge, Start_Date == 04-01-2024 
+         t.op.push_back({"R", 14, "", "Task_ID", "", 2}); 
 
       }
 
