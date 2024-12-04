@@ -4,4 +4,5 @@ Task_ID, Project_ID, Task_Name, Task_Description
 6, 10, design user interface, create mockup for new interface
 8, 20, client feedback analysis, collect feedback from clients 
 10, 15, prepare monthly report, complie metrics and data 
-12, 5, Test new features, conduct quality assurance tests 
+12, 5, Test new features, conduct quality assurance tests 0, 300, prepare annual budget report, estimate cost of the project
+14, 20, place an advertisement, find ADs sponsor

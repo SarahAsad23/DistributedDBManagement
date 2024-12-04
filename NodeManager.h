@@ -223,7 +223,7 @@ public:
                 rowValues[colIndex] = newValue; // Update the value in the target column
                 recordFound = true;
 
-                // Rebuild the row with the updated value
+                // rebuild the row with the updated value
                 newRow.clear(); // Clear any previous data
                 for (int i = 0; i < rowValues.size(); i++) {
                     newRow += rowValues[i];
@@ -265,5 +265,31 @@ public:
         cout << "OLD Row: " << oldRow << "\nNEW Row: " << newRow << endl;
 
         return "OLD Row: " + oldRow + "\nNEW Row: " + newRow;
+    }
+
+    string AddTask(int node, string TaskID, string ProjectID, string taskName, string taskDescription){
+        // Get the file name for the specified node
+        string fileName = getFileName(node);
+
+        if (fileName.empty()) {
+            return "Error: Invalid node.";
+        }
+
+        // Open the file for appending
+        ofstream outFile(fileName, ios::app); // Use ios::app to append to the file
+        if (!outFile) {
+            return "Error: Unable to open file for writing.";
+        }
+
+        string lineToAdd = TaskID + ", " + ProjectID + ", " + taskName + ", " + taskDescription;
+
+        // Append the line to the file
+        outFile << lineToAdd << endl;
+
+        // Close the file
+        outFile.close();
+
+        return "Task added successfully: " + lineToAdd + "\n";
+
     }
 };

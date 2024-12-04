@@ -10,6 +10,7 @@
 #include <sys/socket.h>		//coket, bind, listen, inet_ntoa
 #include <netinet/in.h>		//hton1, htons, inet_ntoa
 #include <unistd.h>
+#include <map>
 #include "TransactionManager.h"
 
 
@@ -33,6 +34,8 @@ private:
     int node; 
     int port; 
 
+    map<int, mutex> nodeLocks; 
+
     
     // function to process the clients request
     string ProcessClientRequest(int clientSocket, transaction t){
@@ -43,12 +46,28 @@ private:
         for(int i = 0; i < t.op.size(); i++){
             string response; 
 
-            if(t.op[i].type == "R"){
-                response = nodeManager.Read(t.op[i].IDNum, t.op[i].node, t.op[i].column);
+            // Get the node we are going to be operating on 
+            int targetNode = t.op[i].node; 
+            nodeLocks[targetNode].lock(); // put a lock on the table being operated on 
+            try{
+                // read from table
+                if(t.op[i].type == "R"){
+                    response = nodeManager.Read(t.op[i].IDNum, t.op[i].node, t.op[i].column);
+                }
+                // write to table 
+                else if(t.op[i].type == "W"){
+                    response = nodeManager.Write(t.op[i].IDString, t.op[i].column, t.op[i].newValue, t.op[i].node);    
+                }
+                // add into table 
+                else if(t.op[i].type == "A"){
+                    response = nodeManager.AddTask(t.op[i].node, t.op[i].TaskID, t.op[i].projectID, t.op[i].taskName, t.op[i].taskDescription); 
+                }
+            } catch (const exception& e){
+                response = "Error: " + string(e.what()); //catch error
             }
-            else if(t.op[i].type == "W"){
-                response = nodeManager.Write(t.op[i].IDString, t.op[i].column, t.op[i].newValue, t.op[i].node);    
-            }
+
+            // Release the lock 
+            nodeLocks[targetNode].unlock(); 
 
             ack = "ACK for operation " + to_string(i + 1) + ": " + response + "\n";
             send(clientSocket, ack.c_str(), ack.size(), 0); 
@@ -64,7 +83,7 @@ private:
     }
 
 
-
+    // This is the function that is threaded (server/client communication) 
     void HandleClient(int clientSocket){
         while(true){
             string transactions = "Choose a Transaction to run \n"
@@ -85,12 +104,20 @@ private:
 
             ProcessClientRequest(clientSocket, t); 
         } 
+
+        close(clientSocket); 
     }
 
 public: 
 
     // starting the server 
     void StartServer(int port) {
+
+        // initialize locks dor nodes 
+        for(int i = 1; i < 3; i++){
+            nodeLocks[i]; 
+        }
+
         // IPv4 and TCP 
         int serverSocket = socket(AF_INET, SOCK_STREAM, 0); 
         if(serverSocket == 0){
@@ -116,6 +143,7 @@ public:
         cout << "Server now listening on port \n" << port << "\n"; 
 
         while(true){
+            // Accept client connecions 
             int clientSocket = accept(serverSocket, nullptr, nullptr); 
             if (clientSocket < 0){
                 cerr << "Unable to Accept Client Connection\n"; 
@@ -123,8 +151,9 @@ public:
             else{
                 cout << "Successfully connected\n";
                 // Create a thread for each client 
-                thread clinetThread(&NodeServer::HandleClient, this, clientSocket); 
-                clinetThread.detach(); // detach thread to handle client independantly 
+                thread clientThread(&NodeServer::HandleClient, this, clientSocket); 
+                clientThread.detach(); // detach thread to handle client independantly 
+
             }    
         }
 

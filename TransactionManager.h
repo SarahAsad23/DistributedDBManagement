@@ -14,6 +14,12 @@ struct operations{
     string column; // column name 
     string newValue; // new value for write operations 
     int node; // table we want to operate on 
+
+   // these are for adding a new task to table 
+    string TaskID; 
+    string projectID; 
+    string taskName;
+    string taskDescription; 
 };
 
 struct transaction{
@@ -28,6 +34,7 @@ private:
 
 
 public: 
+
    // this will allow us to get the surrent time to do timestamp ordering
    long long getTimeStamp(){
       return chrono::duration_cast<chrono::milliseconds>(
@@ -46,29 +53,26 @@ public:
          t.op.push_back({"W", 300, "Nebula Shift", "Project_Name", "New Name", 1}); 
       }
       else if(stoi(clientChoice) == 2){
-         //T2: Read Project with ID 20 (same as project written in T1) and 
-         //update the corresponding projects tasks task description 
+         //T2: look up Project with Project_Manager_ID == 300 
+         //add a new corresponding(Project_ID == 20) task in 
+         //Task.csv with Task_Id == 0, Task_Name == prepare annual budget report, 
+         //Task_Discription == estimate cost of the project 
 
-         //t.op.push_back({"R", 20, "", "Project_ID", "", 1}); 
-         //t.op.push_back({"W", });
+         t.op.push_back({"R", 300, "", "Project_Manager_ID", "", 1}); 
+         t.op.push_back({"A", 0, "", "", "", 2, "0", "300", "prepare annual budget report", "estimate cost of the project"});
       }
       else if(stoi(clientChoice) == 3){
-         //T3: 
-
+         //T3: look up Project with Project ID== 20(to get corresponding Project_ID)
+         //add a new corresponding(Project_ID == 20)  task in Task.cvs with Task_id == 14, 
+         //Task_Name == place an advertisement, Task_Discription == find ADs sponsor
+         t.op.push_back({"R", 20, "", "Project_ID", "", 1}); 
+         t.op.push_back({"A", 0, "", "", "", 2, "14", "20", "place an advertisement", "find ADs sponsor"}); 
       }
       else if(stoi(clientChoice) == 4){
-         //T4: 
+         //T4: Empty for now. 
 
       }
 
       return t; 
     }
-
-
-   // need to have a function here that checks for cycles
-   // dont really need to check for predefined transactions 
-   // but need to check for dynamic transactions 
-   bool hasScCycle(transaction t){
-      
-   }
 };
