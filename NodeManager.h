@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
+#include <map>
 
 using namespace std;
 
@@ -110,14 +111,7 @@ public:
     }
 
     // reading from a node/file
-    string Read(int ID, int node, string column){
-        int row = GetRecord(ID, node, column);
-
-        if(row == -1){
-            cerr << "Error finding record"; 
-            return ""; 
-        }
-
+    string Read(int node){
         string filename = getFileName(node); 
         ifstream inFile(filename); 
 
@@ -126,23 +120,41 @@ public:
             return ""; 
         }
 
+        int totalRows = 0; 
         string line; 
-        int currentRow = 0; 
+        bool firstRowSkipped = false; 
 
+        getline(inFile, line); 
+        firstRowSkipped = true; 
+   
+        // get total number of rows 
         while(getline(inFile, line)){
-            currentRow++; 
-            if(currentRow == row){
-                cout << line; 
+            totalRows++; 
+        }
+
+        srand(time(0)); 
+        int randomRow = rand() % totalRows + 1; 
+
+        inFile.clear();
+        inFile.seekg(0, ios::beg); 
+
+        getline(inFile, line); 
+
+        int currentRow = 0; 
+        while(getline(inFile, line)){
+            currentRow++;
+            if(currentRow == randomRow){
                 return line; 
             }
         }
+
 
         cerr << "Error: Row not Found"; 
         return "";
         
     }
 
-
+    // writing to node/file 
     string Write(string ID, string column, string newValue, int node) {
         // Get the file name for the specified node
         string fileName = getFileName(node);
@@ -267,7 +279,20 @@ public:
         return "OLD Row: " + oldRow + "\nNEW Row: " + newRow;
     }
 
-    string AddTask(int node, string TaskID, string ProjectID, string taskName, string taskDescription){
+    //inserting a task into Task Table
+    string InsertTask(int node){
+        map<string, string> tasks; 
+        tasks.insert({"code Review", "Review code for errors and performance"}); 
+        tasks.insert({"bux Fixes", "identify and resolve issues in software"}); 
+        tasks.insert({"Feature Development", "Design and implement features based on requirements"}); 
+        tasks.insert({"System Design", "Planning and architecting the structure of the software system"}); 
+        tasks.insert({"Unite Testing", "Writing and running tests to ensure individual components work correctly"}); 
+        tasks.insert({"Performance Optimization", "Improving the speed and efficiency of the software."}); 
+        tasks.insert({"API Integration", " Integrating third-party APIs into the software for extended functionality"}); 
+        tasks.insert({"Database Management", "Designing, managing, and optimizing databases for performance."}); 
+        tasks.insert({"DevOps Automation", "Automating the deployment and infrastructure management processes"}); 
+        tasks.insert({"Security Auditing", "Analyzing and fixing vulnerabilities to ensure software security"}); 
+
         // Get the file name for the specified node
         string fileName = getFileName(node);
 
@@ -280,8 +305,13 @@ public:
         if (!outFile) {
             return "Error: Unable to open file for writing.";
         }
+        srand(time(0)); 
+        size_t mapSize = tasks.size(); 
+        size_t randomIndex = rand() % mapSize; 
+        auto it = tasks.begin(); 
+        advance(it, randomIndex); 
 
-        string lineToAdd = TaskID + ", " + ProjectID + ", " + taskName + ", " + taskDescription;
+        string lineToAdd = to_string(rand()) + ", " + to_string(rand()) + ", " + it->first + ", " + it->second;
 
         // Append the line to the file
         outFile << lineToAdd << endl;
@@ -292,4 +322,84 @@ public:
         return "Task added successfully: " + lineToAdd + "\n";
 
     }
+
+    // deleting a row from a table 
+    string Delete(int node){
+    string fileName = getFileName(node); 
+    ifstream inFile(fileName); 
+
+    vector<string> rows;
+    string line;
+    while (getline(inFile, line)) {
+        rows.push_back(line);
+    }
+
+    inFile.close();
+
+    // select a random row
+    srand(time(0)); 
+    int randomIndex = rand() % rows.size(); // Random index (0-based)
+
+    string deletedRow = rows[randomIndex];
+
+    // remove the random row from the vector
+    rows.erase(rows.begin() + randomIndex);
+
+    // Write the updated rows back to the file
+    std::ofstream outFile(fileName);
+    if (!outFile) {
+        std::cerr << "Error writing to file\n";
+        return "";
+    }
+
+    for (const auto& row : rows) {
+        outFile << row << "\n";
+    }
+
+    return "Deleted Row: " + deletedRow + "\n"; 
+
+    outFile.close();
+
+
+    cerr << "Error: Row not Found"; 
+    return "";
+
+}
+
+    // inserting an employee into employee table 
+    string InsertEmployee(int node){
+    vector<string> firstNames = {"Sarah", "Chris", "James", "Olivia", "Daniel", "Sophia", "Ben", "Mia", "Alex", "Lily"}; 
+    vector<string> lastNames = {"Brown", "Williams", "Miller", "Moore", "Clark", "Walker", "Lewis", "Hall", "Allen", "Young"}; 
+    vector<string> roles = {"Manager", "Developer", "Engineer", "Software Engineer", "UI Developer"}; 
+ 
+    string randFirstName = firstNames[rand() % 10]; 
+    string randLastName = lastNames[rand() % 10]; 
+    string randRole = roles[rand() % 5]; 
+
+     // Get the file name for the specified node
+    string fileName = getFileName(node);
+
+    if (fileName.empty()) {
+        return "Error: Invalid node.";
+    }
+
+    // Open the file for appending
+    ofstream outFile(fileName, ios::app); // Use ios::app to append to the file
+    if (!outFile) {
+        return "Error: Unable to open file for writing.";
+    }
+
+    string lineToAdd = to_string(rand()) + ", " + randFirstName + ", " + randLastName + ", " + randRole + "\n"; 
+
+    // Append the line to the file
+    outFile << lineToAdd << endl;
+
+    // Close the file
+    outFile.close();
+
+    return "Employee added successfully: " + lineToAdd + "\n";
+
+    
+
+}
 };

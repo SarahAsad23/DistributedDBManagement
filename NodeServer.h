@@ -52,15 +52,18 @@ private:
             try{
                 // read from table
                 if(t.op[i].type == "R"){
-                    response = nodeManager.Read(t.op[i].IDNum, t.op[i].node, t.op[i].column);
+                    response = nodeManager.Read(t.op[i].node);
+                } 
+                else if(t.op[i].type == "IE"){
+                    response = nodeManager.InsertEmployee(t.op[i].node); 
                 }
-                // write to table 
-                else if(t.op[i].type == "W"){
-                    response = nodeManager.Write(t.op[i].IDString, t.op[i].column, t.op[i].newValue, t.op[i].node);    
+                // insert into task table 
+                else if(t.op[i].type == "IT"){
+                    response = nodeManager.InsertTask(t.op[i].node); 
                 }
-                // add into table 
-                else if(t.op[i].type == "A"){
-                    response = nodeManager.AddTask(t.op[i].node, t.op[i].TaskID, t.op[i].projectID, t.op[i].taskName, t.op[i].taskDescription); 
+                // delete from table 
+                else if(t.op[i].type == "D"){
+                    response = nodeManager.Delete(t.op[i].node);
                 }
             } catch (const exception& e){
                 response = "Error: " + string(e.what()); //catch error
@@ -78,7 +81,10 @@ private:
             read(clientSocket, buffer, sizeof(buffer)); 
         }
 
-        return "Transaction Complete"; 
+        string complete = "Transaction Complete\n"; 
+        send(clientSocket, complete.c_str(), complete.size(), 0); 
+
+        return complete; 
       
     }
 
@@ -87,10 +93,19 @@ private:
     void HandleClient(int clientSocket){
         while(true){
             string transactions = "Choose a Transaction to run \n"
-                                "1) Update Project name for Employee with ID 300 \n"
-                                "2) Update teask decription for project with Manager ID 300\n" 
-                                "3) Read project with ID 20 and add task for that project \n" 
-                                "4) ANOTHER TRANSACTION\n";
+                                "1) Insert an Employee working on specific Project \n"
+                                "       hop 1: Read from Project\n"
+                                "       hop 2: Insert Employee\n"
+                                "2) Insert an Employee for a Project and add corresponding task\n"
+                                "       hop 1: read a project\n"
+                                "       hop 2: Insert Task\n"
+                                "       hop 3: Insert Employee\n" 
+                                "3) Update a Task Corresponding to a Project \n"
+                                "       hop 1: read a project\n"
+                                "       hop 2: Update Task\n" 
+                                "4) Fire an Employee working on a specific project\n"
+                                "       hop 1: Read project\n"
+                                "       hop 2: Delete employee\n";
             send(clientSocket, transactions.c_str(), transactions.size(), 0); 
 
             char buffer[1024] = {0}; 
