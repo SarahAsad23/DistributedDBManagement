@@ -11,9 +11,12 @@
 #include <netinet/in.h>		//hton1, htons, inet_ntoa
 #include <unistd.h>         // for close()
 #include <arpa/inet.h>
+#include <chrono>
+#include <thread>
 
 
-
+using namespace std; 
+using namespace chrono; 
 
 class Client{
 
@@ -37,7 +40,9 @@ public:
 
         srand(time(0)); 
 
-        for(int i = 0; i < 10; i++){
+        // chrnon used to see how long execution took 
+        auto start = high_resolution_clock::now(); 
+        for(int i = 0; i < 50; i++){
             //read transaction choices from buffer 
             char choice[1024] = {0}; 
             read(clientSocket, choice, sizeof(choice));
@@ -50,6 +55,8 @@ public:
             // send that choice to server 
             send(clientSocket, userChoice.c_str(), userChoice.size(), 0); 
             cout << "Choice sent to server " << userChoice << endl;
+
+            //this_thread::sleep_for(chrono::seconds(1)); 
 
             while(true){
 
@@ -72,7 +79,14 @@ public:
             }
         }
 
+        auto end = high_resolution_clock::now(); 
+        auto duration = chrono::duration_cast<chrono::microseconds>(end-start);
+
+        cout << "Time taken: " << duration.count() << " Milliseconds \n";
+
         // close socket connection
         close(clientSocket); 
     }
 };
+
+

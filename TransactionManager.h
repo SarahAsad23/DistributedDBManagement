@@ -10,19 +10,7 @@ using namespace std;
 struct operations{
     string type; // R, W, IT, IE, D
     int node; // table we want to operate on 
-    /*
-    int IDNum; // record ID to operate on 
-    string IDString; 
-    string column; // column name 
-    string newValue; // new value for write operations 
-    int node; // table we want to operate on 
-
-   // these are for adding a new task to table 
-    string TaskID; 
-    string projectID; 
-    string taskName;
-    string taskDescription; 
-    */
+    int clientSocket; 
 };
 
 struct transaction{
@@ -34,15 +22,14 @@ struct transaction{
 class TransactionManager{
 
 private: 
-
-
-public: 
-
    // this will allow us to get the surrent time to do timestamp ordering
    long long getTimeStamp(){
       return chrono::duration_cast<chrono::milliseconds>(
          chrono::system_clock::now().time_since_epoch()).count();
    }
+
+public: 
+
 
    transaction pickTransaction(const string& clientChoice){
       transaction t; // create the transaction 
@@ -64,7 +51,7 @@ public:
 
          t.op.push_back({"R", 1}); 
          t.op.push_back({"IT", 2});
-         t.op.push_back({"IE, 1"}); 
+         t.op.push_back({"IE", 1}); 
       }
       else if(stoi(clientChoice) == 3){
          //T3: delete a task corresponding to a project (task complete)

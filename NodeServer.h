@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <iostream>
@@ -16,6 +17,7 @@
 
 
 using namespace std; 
+
 
 // we will use sockets to set up the server and  will 
     // route it to operate on only each table/node table. 
@@ -178,3 +180,4 @@ public:
     }
 
 };
+

@@ -6,3 +6,96 @@ Task_ID, Project_ID, Task_Name, Task_Description
 10, 15, prepare monthly report, complie metrics and data 
 12, 5, Test new features, conduct quality assurance tests 0, 300, prepare annual budget report, estimate cost of the project
 14, 20, place an advertisement, find ADs sponsor
+16, 5, update website content, revise content to be up to date
+18, 10, research market trends, analyze current market trends
+20, 10, design user interface, create mockup for new interface
+22, 20, client feedback analysis, collect feedback from clients
+24, 15, prepare monthly report, compile metrics and data
+26, 5, test new features, conduct quality assurance tests
+28, 300, prepare annual budget report, estimate cost of the project
+30, 20, place an advertisement, find ADs sponsor
+32, 5, implement SEO strategies, improve search engine rankings
+34, 10, finalize business plan, complete final draft of business plan
+36, 20, collect customer data, gather feedback and user data
+38, 15, update financial projections, revise financial forecasts
+40, 5, create marketing plan, plan for upcoming marketing campaigns
+42, 10, draft social media posts, write and schedule posts for platforms
+44, 20, organize focus group, conduct a focus group with customers
+46, 15, analyze sales trends, review and analyze monthly sales reports
+48, 5, conduct competitor analysis, analyze competitor products and strategies
+50, 10, design new logo, create new logo for rebranding effort
+52, 20, schedule product launch, arrange and coordinate product launch
+54, 15, update pricing strategy, adjust product pricing based on market conditions
+56, 5, develop mobile app, create and test mobile application
+58, 10, conduct customer survey, survey customers for feedback
+60, 20, create email campaign, design and implement email marketing campaigns
+62, 15, review quarterly performance, review and report on company performance
+64, 5, develop website, create and launch new website
+66, 10, organize team meeting, schedule and facilitate team meeting
+68, 20, order product materials, order necessary materials for production
+70, 15, conduct training session, provide training for new employees
+72, 5, implement analytics dashboard, set up and monitor data analytics dashboard
+74, 10, update client database, input and verify client information
+76, 20, arrange transportation, organize transport logistics for project
+78, 15, update marketing materials, revise brochures and flyers for promotion
+80, 5, conduct usability testing, perform usability tests on product interface
+82, 10, review supplier contracts, evaluate and negotiate supplier agreements
+84, 20, conduct market research, gather insights on market trends and demand
+86, 15, analyze customer retention, measure and report on customer retention rates
+88, 5, optimize website performance, improve site speed and user experience
+90, 10, create press release, draft and distribute company press release
+92, 20, arrange event venue, book and prepare event venue for conference
+94, 5, create customer support plan, develop a strategy for customer service
+96, 10, track social media analytics, monitor and report on social media performance
+98, 20, organize product demo, arrange and present product demonstration
+100, 15, evaluate marketing ROI, calculate return on investment for marketing campaigns
+102, 5, build landing page, design and launch landing page for new campaign
+104, 10, schedule customer meeting, arrange meeting with client to discuss project
+106, 20, conduct product testing, test new products for quality assurance
+108, 15, review HR policies, evaluate and update human resources policies
+110, 5, create sales strategy, develop approach for increasing sales revenue
+112, 10, prepare user manual, write detailed user guide for software product
+114, 20, negotiate supplier contracts, work on terms and pricing with suppliers
+116, 15, create company newsletter, design and send company newsletter to clients
+118, 5, build customer database, collect and organize customer information
+120, 10, redesign company website, refresh and modernize website design
+122, 20, prepare production schedule, set timeline for production deadlines
+124, 15, review budget, evaluate and adjust project budget
+126, 5, create advertising campaign, develop and execute advertising strategies
+128, 10, prepare presentation slides, design presentation for client meeting
+130, 20, set up payment gateway, integrate online payment system into website
+132, 15, update CRM system, update customer relationship management system
+134, 5, improve conversion rates, analyze and optimize sales funnel
+136, 10, create promotional video, develop video content for marketing
+138, 20, host a webinar, organize and host online seminar or presentation
+140, 15, update product catalog, revise and update product listings
+142, 5, develop email list, compile and manage list of email subscribers
+144, 10, conduct employee survey, collect feedback from staff members
+146, 20, order office supplies, restock necessary office materials
+148, 15, create annual report, compile and publish yearly company report
+150, 5, implement user authentication, develop secure login system for website
+152, 10, conduct competitive analysis, evaluate competitor products and pricing
+154, 20, schedule team training, organize training sessions for employees
+156, 15, review customer feedback, analyze and act on feedback received
+158, 5, set up online store, launch e-commerce platform for products
+160, 10, organize project timeline, create project schedule and milestones
+162, 20, perform cost analysis, analyze and reduce project costs
+164, 15, develop brand strategy, define brand positioning and marketing strategy
+166, 5, integrate third-party tools, set up third-party integrations for website
+168, 10, conduct quarterly review, evaluate and report on quarterly performance
+170, 20, update inventory management system, maintain and organize inventory records
+172, 15, create customer personas, define target customer groups for marketing
+174, 5, implement A/B testing, conduct tests to optimize website performance
+176, 10, organize team brainstorming session, facilitate creative idea session
+178, 20, analyze competitor pricing, evaluate and adjust pricing strategy
+180, 15, create business plan, write detailed business and marketing plans
+182, 5, develop content strategy, plan content creation and distribution
+184, 10, finalize sales pitch, refine and improve sales pitch for potential clients
+186, 20, arrange conference call, set up virtual meeting with stakeholders
+188, 15, conduct market segmentation, divide market into distinct segments
+190, 5, set up tracking systems, integrate tools to track key business metrics
+192, 10, develop product roadmap, plan and schedule upcoming product releases
+194, 20, plan product packaging, design and develop packaging for new products
+196, 15, create video tutorials, develop video guides for product features
+198, 5, finalize project timeline, set final dates and deadlines for project deliverables
+200, 5, conduct final review, assess and finalize project outcomes
