@@ -1,6 +1,4 @@
 # DistributedDBManagement
-Transaction Processing and Distributed Database management
-
 This project implements a transaction processing system inspired
 by the principles outlined in the paper "Transaction Chains: Achieving
 Serializability with Low Latency in Geo-Distributed Storage Systems." 
