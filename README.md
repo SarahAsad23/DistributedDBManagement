@@ -3,8 +3,8 @@ Transaction Processing and Distributed Database management
 
 This project implements a transaction processing system inspired
 by the principles outlined in the paper Transaction Chains: Achieving
-Serializability with Low Latency in Geo-Distributed Storage Systems
-[4]. The primary goal of this system is to emulate a geo-distributed
+Serializability with Low Latency in Geo-Distributed Storage Systems. 
+The primary goal of this system is to emulate a geo-distributed
 database environment and demonstrate how transaction chains
 can be effectively utilized to achieve serializability with higher
 concurrency and lower latency. Our system simulates a distributed
